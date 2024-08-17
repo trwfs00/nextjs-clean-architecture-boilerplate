@@ -1,0 +1,127 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: mydb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Setup Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Run Prisma migrations to setup the database
+      - name: Run Prisma Migrations
+        run: npx prisma migrate dev --name init
+
+      # Build the Next.js app
+      - name: Build Next.js App
+        run: npm run build
+
+      # Run Jest unit tests
+      - name: Run Jest Unit Tests
+        run: npm run test
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: 177177
+          MYSQL_DATABASE: mydb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Setup Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Run Prisma migrations
+      - name: Run Prisma Migrations
+        run: npx prisma migrate dev --name init
+
+      # Start Next.js app
+      - name: Start Next.js App
+        run: npm run dev &
+
+      # Run Cypress End-to-End Tests
+      - name: Run Cypress Tests
+        run: npx cypress run
+
+  storybook:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Setup Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Build Storybook
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      # Deploy Storybook to GitHub Pages
+      - name: Deploy Storybook
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./storybook-static

@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=mysql://root:password@db:3306/mydb
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: "npm run dev"  # Runs the Next.js app
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 177177
+      MYSQL_DATABASE: clean-arichitect
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-data:/var/lib/mysql
+
+  storybook:
+    build:
+      context: .
+    ports:
+      - '6006:6006'  # Storybook runs on port 6006
+    volumes:
+      - .:/app
+    command: "npm run storybook"  # Runs Storybook service
+
+  tests:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=mysql://root:password@db:3306/mydb
+    depends_on:
+      - db
+    command: "npm run test"  # Runs tests (Jest)\
+  
+  cypress:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"  # Optional, if Cypress requires a port
+    command: "npx cypress run"  # Runs Cypress end-to-end tests
+    depends_on:
+      - app
+      - db
+
+volumes:
+  db-data:

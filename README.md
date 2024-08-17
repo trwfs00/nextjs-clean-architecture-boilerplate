@@ -59,7 +59,7 @@ swagger.ts                          # Swagger setup for API documentation
 tsconfig.json                       # TypeScript configuration
 ```
 
-## Architecture: Clean Architecture Layers
+# Architecture: Clean Architecture Layers
 ### 1. Presentation Layer (UI, Pages, Components):
 - This layer handles user interaction, UI components, and pages in `Next.js`.
 - Responsible for rendering the interface and calling the `application layer` when necessary.
@@ -81,7 +81,7 @@ tsconfig.json                       # TypeScript configuration
 ### 5. External Systems:
 - External services like APIs or databases are accessed via the infrastructure layer.
 
-## Testing Integration
+# Testing Integration
 ### Unit Tests:
 - Located in `/src/tests/unit/`.
 - Tests individual use cases and entities in isolation (e.g., testing `UserRegistration.ts` with a mocked repository).
@@ -95,7 +95,7 @@ tsconfig.json                       # TypeScript configuration
 - Configuration: `stryker.conf.js`.
 - Reports help you identify weaknesses in your existing test suite.
 
-## Tooling and Infrastructure
+# Tooling and Infrastructure
 ### 1. Logging:
 - `Winston` is used for logging errors, warnings, and info messages.
 - Configuration: `/src/infrastructure/logger/logger.ts`.
@@ -114,12 +114,12 @@ tsconfig.json                       # TypeScript configuration
 - Configuration: `docker-compose.yml`.
 - `Dockerfil`e is used to containerize the Next.js application.
 
-## CI/CD (GitHub Actions)
+# CI/CD (GitHub Actions)
 - `GitHub Actions` automates the continuous integration and continuous delivery (CI/CD) pipeline.
 - Located in `.github/workflows/ci.yml`.
 - It runs the build, test (unit, E2E), and mutation tests automatically when code is pushed.
 
-## Summary:
+# Summary:
 - **Clean Architecture** divides your project into distinct layers:
   - **Presentation (UI)**: Handles the user interface and interaction.
   - **Application (Use Cases)**: Manages business logic and interacts with the domain and infrastructure.

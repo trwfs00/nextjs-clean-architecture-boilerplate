@@ -59,67 +59,67 @@ swagger.ts                          # Swagger setup for API documentation
 tsconfig.json                       # TypeScript configuration
 ```
 
-# Architecture: Clean Architecture Layers
-## 1. Presentation Layer (UI, Pages, Components):
+## Architecture: Clean Architecture Layers
+### 1. Presentation Layer (UI, Pages, Components):
 - This layer handles user interaction, UI components, and pages in `Next.js`.
 - Responsible for rendering the interface and calling the `application layer` when necessary.
 - Tools: `Storybook` for documenting UI components.
-## 2. Application Layer (Use Cases, Services):
+### 2. Application Layer (Use Cases, Services):
 - Contains the business logic of the application, managing use cases such as `UserRegistration.ts`.
 - It is the core of the system and interacts with the domain layer and infrastructure layer.
 - State management with `Nanostores` happens in this layer.
 - Tools: `Unit tests` to validate the correctness of use cases.
-## 3. Domain Layer (Entities, Repositories):
+### 3. Domain Layer (Entities, Repositories):
 - Contains the core domain models like User.ts and interfaces like `IUserRepository.ts`.
 - Defines business rules and entities independently of any framework.
 - Tools: `Unit tests` to test domain logic and repository interfaces.
-## 4. Infrastructure Layer (Prisma, Repositories, Logger):
+### 4. Infrastructure Layer (Prisma, Repositories, Logger):
 - Contains the concrete implementations of the domain repositories and external services.
 - Uses `Prisma` ORM for database interactions, such as `PrismaUserRepository`.ts.
 - Also includes `Winston` for logging.
 - Tools: `E2E tests` ensure that infrastructure components interact correctly with the rest of the system.
-## 5. External Systems:
+### 5. External Systems:
 - External services like APIs or databases are accessed via the infrastructure layer.
 
-# Testing Integration
-## Unit Tests:
+## Testing Integration
+### Unit Tests:
 - Located in `/src/tests/unit/`.
 - Tests individual use cases and entities in isolation (e.g., testing `UserRegistration.ts` with a mocked repository).
 - Tool: `Jest`.
-## End-to-End (E2E) Tests:
+### End-to-End (E2E) Tests:
 - Located in `/src/tests/e2e/`.
 - Simulates user actions from the front end to the back end, ensuring the entire application works as expected.
 - Tool: `Cypress` or `Playwright`.
-## Mutation Tests:
+### Mutation Tests:
 - `Stryker` tests the robustness of your unit tests by mutating the code and checking if the tests detect the changes.
 - Configuration: `stryker.conf.js`.
 - Reports help you identify weaknesses in your existing test suite.
 
-# Tooling and Infrastructure
-## 1. Logging:
+## Tooling and Infrastructure
+### 1. Logging:
 - `Winston` is used for logging errors, warnings, and info messages.
 - Configuration: `/src/infrastructure/logger/logger.ts`.
-## 2. API Documentation (Swagger):
+### 2. API Documentation (Swagger):
 - `Swagger` is used to document RESTful API endpoints.
 - Configuration: `/swagger.ts`.
 - Accessible via `/api/docs`.
-## 3. Component Documentation (Storybook):
+### 3. Component Documentation (Storybook):
 - `Storybook` is used to visually test and document UI components.
 - Configuration: `.storybook/main.js`.
-## 4. State Management (Nanostores):
+### 4. State Management (Nanostores):
 - `Nanostores` provides simple and small global state management.
 - Store files located in `/src/application/stores/`.
-## 5. Containerization (Docker Compose):
+### 5. Containerization (Docker Compose):
 - `Docker Compose` sets up the application environment with dependencies like PostgreSQL for Prisma.
 - Configuration: `docker-compose.yml`.
 - `Dockerfil`e is used to containerize the Next.js application.
 
-# CI/CD (GitHub Actions)
+## CI/CD (GitHub Actions)
 - `GitHub Actions` automates the continuous integration and continuous delivery (CI/CD) pipeline.
 - Located in `.github/workflows/ci.yml`.
 - It runs the build, test (unit, E2E), and mutation tests automatically when code is pushed.
 
-# Summary:
+## Summary:
 - **Clean Architecture** divides your project into distinct layers:
   - **Presentation (UI)**: Handles the user interface and interaction.
   - **Application (Use Cases)**: Manages business logic and interacts with the domain and infrastructure.
